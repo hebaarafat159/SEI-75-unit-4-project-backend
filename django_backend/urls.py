@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
+from rest_framework_simplejwt import views as jwt_views
 from main_app import views
 
 router = routers.DefaultRouter()
@@ -28,5 +29,11 @@ router.register(r'photos', views.PhotoViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('token/', jwt_views.TokenObtainPairView.as_view(), name ='token_obtain_pair'),
+    path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name ='token_refresh'),
+    path('home/', views.HomeView.as_view(), name ='home'),
+    path('logout/', views.LogoutView.as_view(), name ='logout'),
+    path('register/', views.RegisterView.as_view(), name ='register'),
     path('', include (router.urls)),
+    path('api-auth/', include ('rest_framework.urls', namespace='rest_framework')),
 ]

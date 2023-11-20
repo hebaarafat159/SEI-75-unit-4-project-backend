@@ -57,3 +57,7 @@ class Request(models.Model):
     Book = models.ForeignKey(Book, on_delete=models.CASCADE, default=1)
     author = models.ForeignKey(Author,on_delete=models.CASCADE, default=1)
     
+class Customer(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    location = models.CharField(max_length=30, blank=True)
+    
