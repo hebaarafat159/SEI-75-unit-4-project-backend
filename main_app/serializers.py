@@ -1,35 +1,42 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from .models import Book, Author, Photo, Request
+from .models import Book, Author, Photo, Request, Customer
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['url', 'username', 'email', 'groups']
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ['url', 'name']
 
-class BookSerializer(serializers.HyperlinkedModelSerializer):
+class CustomerSerializer(serializers.ModelSerializer):
+    user =  UserSerializer(read_only=True)
     class Meta:
-        model = Book
-    # 'author'
-        fields = ['title', 'category', 'description', 'published_date']
+        model = Customer
+        fields = '__all__'
 
-class AuthorSerializer(serializers.HyperlinkedModelSerializer):
+class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
         fields = ['name', 'avatar_url']
 
-class PhotoSerializer(serializers.HyperlinkedModelSerializer):
+class BookSerializer(serializers.ModelSerializer):
+    author =  AuthorSerializer(read_only=True)
+    class Meta:
+        model = Book
+        fields = '__all__'
+# ['title', 'category', 'description', 'published_date', 'cover_image', 'author']
+
+class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
         # 'book'
         fields = ['url']
         
-class RequestSerializer(serializers.HyperlinkedModelSerializer):
+class RequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Request
         fields = ['status']

@@ -29,11 +29,17 @@ router.register(r'photos', views.PhotoViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # users routes
     path('token/', jwt_views.TokenObtainPairView.as_view(), name ='token_obtain_pair'),
     path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name ='token_refresh'),
     path('home/', views.HomeView.as_view(), name ='home'),
     path('logout/', views.LogoutView.as_view(), name ='logout'),
-    path('register/', views.RegisterView.as_view(), name ='register'),
+    path('register/', views.RegisterCustomerAPIView.as_view(), name ='register'),
+    # books routes
+    path('books/add/', views.CreateBookAPIView.as_view(), name ='add_book'),
+    path('books/<int:pk>/update/', views.UpdateBookAPIView.as_view(), name='update_book'),
+    path('books/<int:pk>/delete/', views.DeleteBookAPIView.as_view(), name='delete_book'),
+    # path('books/<int:pk>/', views.BookDetail.as_view(), name='book_detail'),
     path('', include (router.urls)),
     path('api-auth/', include ('rest_framework.urls', namespace='rest_framework')),
 ]

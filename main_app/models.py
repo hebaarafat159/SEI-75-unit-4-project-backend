@@ -14,6 +14,11 @@ REQUEST_STATUS = (
   ('R', 'Rejected'),
 )
 
+class Customer(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE, default=1)
+    # user = models.OneToOneField(User, on_delete=models.CASCADE)
+    location = models.CharField(max_length=30, blank=True)
+    
 # Create your models here.
 class Author(models.Model):
    name = models.CharField(max_length=100)
@@ -29,6 +34,7 @@ class Book(models.Model):
     description = models.TextField(max_length=250)
     published_date = models.DateField('Published Date')
     author = models.ForeignKey(Author,on_delete=models.CASCADE, default=1)
+    cover_image = models.CharField(max_length=225,default='')
     status = models.CharField(
             max_length=1,
             choices=BOOK_STATUS,
@@ -39,7 +45,6 @@ class Book(models.Model):
 
     def get_absolute_url(self):
         return reverse('detail', kwargs={'book_id': self.id})
-
  
 class Photo(models.Model):
     url = models.CharField(max_length=200)
@@ -57,7 +62,4 @@ class Request(models.Model):
     Book = models.ForeignKey(Book, on_delete=models.CASCADE, default=1)
     author = models.ForeignKey(Author,on_delete=models.CASCADE, default=1)
     
-class Customer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    location = models.CharField(max_length=30, blank=True)
-    
+
