@@ -39,7 +39,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'sei-75-unit-4-project-backend-production.up.railway.app',
-    'sei-75-unit-4-project-backend.railway.internal'
+    'sei-75-unit-4-project-backend.railway.internal',
+    'localhost'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True

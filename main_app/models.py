@@ -17,7 +17,7 @@ REQUEST_STATUS = (
 class Customer(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE, default=1)
     # user = models.OneToOneField(User, on_delete=models.CASCADE)
-    location = models.CharField(max_length=30, blank=True)
+    location = models.CharField(max_length=225, blank=True)
     
 # Create your models here.
 class Author(models.Model):
