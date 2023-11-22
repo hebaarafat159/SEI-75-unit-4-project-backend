@@ -71,6 +71,22 @@ class BookViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = BookSerializer
     permission_classes = [permissions.IsAuthenticated]
    
+class BookDetail(APIView):
+     def get(self, request, *args, **kwargs):
+        print(request.query_params['pk'])
+        # instance_id = kwargs.get('pk')
+        # print(instance_id)
+        # instance = Book.objects.get(pk=instance_id)
+        # print(instance)
+        # # Assuming you have a serializer for your model
+        # serializer = BookSerializer(instance, data=request.data)
+        
+        # if serializer.is_valid():
+        #     return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    
 class CreateBookAPIView(APIView):
     def post(self, request, *args, **kwargs):
         print(request.data)

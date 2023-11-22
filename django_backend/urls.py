@@ -39,7 +39,7 @@ urlpatterns = [
     path('books/add/', views.CreateBookAPIView.as_view(), name ='add_book'),
     path('books/<int:pk>/update/', views.UpdateBookAPIView.as_view(), name='update_book'),
     path('books/<int:pk>/delete/', views.DeleteBookAPIView.as_view(), name='delete_book'),
-    # path('books/<int:pk>/', views.BookDetail.as_view(), name='book_detail'),
+    path('books/<int:pk>/', views.BookDetail.as_view(), name='book_detail'),
     path('', include (router.urls)),
     path('api-auth/', include ('rest_framework.urls', namespace='rest_framework')),
 ]
