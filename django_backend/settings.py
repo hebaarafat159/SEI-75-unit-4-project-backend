@@ -81,12 +81,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# CSRF_TRUSTED_ORIGINS = [
-#     'sei-75-unit-4-project-backend.railway.internal/'
-#     'sei-75-unit-4-project-backend-production.up.railway.app/',
-#     'https://*sei-75-unit-4-project-backend-production.up.railway.app/',
-#     'https://*.railway.app/'
-# ]
+CSRF_TRUSTED_ORIGINS = [
+    'https://sei-75-unit-4-project-backend-production.up.railway.app'
+]
 
 ROOT_URLCONF = 'django_backend.urls'
 
