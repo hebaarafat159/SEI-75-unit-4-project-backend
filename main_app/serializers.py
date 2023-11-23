@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from .models import Book, Author, Photo, Request, Customer
+from .models import Book, Author, Photo, BookRequest, Customer
 from django.contrib.auth.hashers import make_password
 
 class UserSerializer(serializers.ModelSerializer):
@@ -51,6 +51,6 @@ class PhotoSerializer(serializers.ModelSerializer):
         
 class RequestSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Request
+        model = BookRequest
         fields = ['status']
         
