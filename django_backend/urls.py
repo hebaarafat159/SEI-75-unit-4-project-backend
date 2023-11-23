@@ -26,6 +26,7 @@ router.register(r'groups', views.GroupViewSet)
 router.register(r'books', views.BookViewSet)
 router.register(r'authors', views.AuthorViewSet)
 router.register(r'photos', views.PhotoViewSet)
+router.register(r'customers', views.CustomerViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,7 +35,7 @@ urlpatterns = [
     path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name ='token_refresh'),
     path('home/', views.HomeView.as_view(), name ='home'),
     path('logout/', views.LogoutView.as_view(), name ='logout'),
-    path('register/', views.RegisterCustomerAPIView.as_view(), name ='register'),
+    path('customers/create/', views.CustomerCreateAPIView.as_view(), name ='customer_create'),
     # books routes
     path('books/add/', views.CreateBookAPIView.as_view(), name ='add_book'),
     path('books/<int:pk>/update/', views.UpdateBookAPIView.as_view(), name='update_book'),

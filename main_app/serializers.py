@@ -5,18 +5,19 @@ from .models import Book, Author, Photo, Request, Customer
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'groups']
+        fields = ['username', 'email', 'id']
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ['url', 'name']
+        fields = '__all__'
 
 class CustomerSerializer(serializers.ModelSerializer):
     user =  UserSerializer(read_only=True)
     class Meta:
         model = Customer
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ['user','location']
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
