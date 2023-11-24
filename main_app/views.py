@@ -114,35 +114,25 @@ class CreateBookAPIView(CreateAPIView):
         author_id = self.request.data.get('author_id', {})
         customer_instance = Customer.objects.filter(id=customer_id).first()
         author_instance = Author.objects.filter(id=author_id).first()
-        # customer_model = Customer.objects.get(id=customer_data['id'])
-        # author_model = Author.objects.get(id=author_data['id'])
         serializer.save(customer=customer_instance, author = author_instance)
-
-
-# class CreateBookAPIView(APIView):
-#     def post(self, request, *args, **kwargs):
-#         print(request.data)
-#         serializer = BookSerializer(data=request.data,context={'request': request})
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         else:
-#             print(serializer.errors)
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UpdateBookAPIView(APIView):
     def post(self, request, *args, **kwargs):
-        print(request.data)
         instance_id = kwargs.get('pk')
-        print(instance_id)
         instance = Book.objects.get(pk=instance_id)
+        
+        author_id = self.request.data.get('author_id', {})
+        author_instance = Author.objects.filter(id=author_id).first()
         
         # Assuming you have a serializer for your model
         serializer = BookSerializer(instance, data=request.data)
         
         if serializer.is_valid():
             serializer.save()
+            Book.objects.filter(pk=instance_id).update(author=author_instance)
             return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            print(serializer.errors)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
