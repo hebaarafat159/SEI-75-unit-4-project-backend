@@ -8,6 +8,8 @@ from .serializers import UserSerializer, GroupSerializer, BookSerializer, Author
 from .models import Book, Author, Photo, Customer
 from rest_framework.generics import DestroyAPIView, RetrieveAPIView, CreateAPIView
 from django.contrib.auth import authenticate
+from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
 ########################### User Requests ##############################################
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
@@ -33,15 +35,15 @@ class HomeView(APIView):
        return Response(content)
 
 class LogoutView(APIView):
-     permission_classes = (IsAuthenticated,)
-     def post(self, request):
+    permission_classes = (IsAuthenticated,)
+    def post(self, request):
         try:
-             refresh_token = request.data["refresh_token"]
-             token = RefreshToken(refresh_token)
-             token.blacklist()
-             return Response(status=status.HTTP_205_RESET_CONTENT)
+            refresh_token = request.body["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class UserCreateAPIView(CreateAPIView):
         queryset = User.objects.all()
