@@ -36,6 +36,8 @@ urlpatterns = [
     path('home/', views.HomeView.as_view(), name ='home'),
     path('logout/', views.LogoutView.as_view(), name ='logout'),
     path('customers/create/', views.CustomerCreateAPIView.as_view(), name ='customer_create'),
+    path('customers/<str:username>/<str:password>', views.CustomerRetrieveAPIView.as_view(), name='customer-retrieve'),
+    
     # books routes
     path('books/add/', views.CreateBookAPIView.as_view(), name ='add_book'),
     path('books/<int:pk>/update/', views.UpdateBookAPIView.as_view(), name='update_book'),

@@ -28,16 +28,17 @@ class CustomerSerializer(serializers.ModelSerializer):
     user =  UserSerializer(read_only=True)
     class Meta:
         model = Customer
-        # fields = '__all__'
-        fields = ['user','location']
+        fields = '__all__'
+        # fields = ['user','location']
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
-        fields = ['name', 'avatar_url']
+        fields = '__all__'#['id', 'name', 'avatar_url']
 
 class BookSerializer(serializers.ModelSerializer):
     author =  AuthorSerializer(read_only=True)
+    customer = CustomerSerializer(read_only=True)
     class Meta:
         model = Book
         fields = '__all__'

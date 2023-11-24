@@ -41,10 +41,10 @@ class Book(models.Model):
     category = models.CharField(max_length=200)
     description = models.TextField(max_length=250)
     published_date = models.DateField('Published Date')
-    author = models.ForeignKey(Author,on_delete=models.CASCADE)
-    owner = models.ForeignKey(Customer,on_delete=models.CASCADE) 
+    author = models.ForeignKey(Author,on_delete=models.CASCADE, verbose_name="author")
+    customer = models.ForeignKey(Customer,on_delete=models.CASCADE,default=2000) 
     cover_image = models.CharField(max_length=225,default='')
-    book_requests =  models.ManyToManyField(BookRequest)
+    # book_requests =  models.ManyToManyField(BookRequest)
     status = models.CharField(
             max_length=1,
             choices=BOOK_STATUS,

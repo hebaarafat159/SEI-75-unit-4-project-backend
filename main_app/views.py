@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated,AllowAny
 from .serializers import UserSerializer, GroupSerializer, BookSerializer, AuthorSerializer, PhotoSerializer, CustomerSerializer 
 from .models import Book, Author, Photo, Customer
 from rest_framework.generics import DestroyAPIView, RetrieveAPIView, CreateAPIView
-
+from django.contrib.auth import authenticate
 ########################### User Requests ##############################################
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
@@ -67,41 +67,32 @@ class CustomerCreateAPIView(CreateAPIView):
                 # Handle invalid user data
                 self.response.status_code = status.HTTP_400_BAD_REQUEST
                 self.response.data = user_serializer.errors
-        
-# class CustomerCreateAPIView(APIView):
-#     def post(self, request, *args, **kwargs):
-#         print('\n\n-------------------------')
-#         print(request.data)
-#         print('-------------------------')
-#         print(request.data.get('user'))
-#         # serializer = CustomerSerializer(data = request.data, context={'request': request})
-#         # if serializer.is_valid():
-#         #     serializer.save()
-#         #     print(serializer.data)
-#         #     return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         # else: 
-#         #     print(serializer.errors)
-#         #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#         print('-------------------------')
-#         serializerUser = UserSerializer(data=request.data.get('user'),context={'request': request})
-#         if serializerUser.is_valid():
-#             serializerUser.save()
-#             print('-------------------------')
-#             print(serializerUser.data)
-#             print(serializerUser.data['id'])
-#             # user_id = serializerUser.data['id']
-#             print('-------------------------')
-#             print(request.data)
-#             print('-------------------------')
-#             serializer = CustomerSerializer(data = {'location': request.data.get('location'),'user':serializerUser.data}, context={'request': request})
-#             if serializer.is_valid():
-#                 serializer.save()
-#                 print(serializer.data)
-#                 return Response(serializer.data, status=status.HTTP_201_CREATED)
-#             else: 
-#                 print(serializer.errors)
-#                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+ 
+class CustomerRetrieveAPIView(RetrieveAPIView):
+    serializer_class = CustomerSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        # Get the username and password from the request
+        username = kwargs.get('username')
+        password = kwargs.get('password')
+        # Authenticate the user
+        user = authenticate(request, username=username, password=password)
+        print(user)
+
+        if user is not None:
+            # User is authenticated, get the YourModel instance associated with the user
+            customer_instance = Customer.objects.filter(user=user).first()
+            print(customer_instance)
+            if customer_instance is not None:
+                serializer = self.get_serializer(customer_instance)
+                print(serializer.data)
+                return Response(serializer.data)
+            else:
+                return Response({'detail': 'YourModel instance not found for this user.'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({'detail': 'Invalid username or password.'}, status=status.HTTP_401_UNAUTHORIZED)
+     
 ########################### Book Requests ##############################################
 
 class BookViewSet(viewsets.ReadOnlyModelViewSet):
@@ -113,16 +104,31 @@ class BookDetail(RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
    
-class CreateBookAPIView(APIView):
-    def post(self, request, *args, **kwargs):
-        print(request.data)
-        serializer = BookSerializer(data=request.data,context={'request': request})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            print(serializer.errors)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class CreateBookAPIView(CreateAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    
+    def perform_create(self, serializer):
+        # Extract user data from the request
+        customer_id = self.request.data.get('customer_id', {})
+        author_id = self.request.data.get('author_id', {})
+        customer_instance = Customer.objects.filter(id=customer_id).first()
+        author_instance = Author.objects.filter(id=author_id).first()
+        # customer_model = Customer.objects.get(id=customer_data['id'])
+        # author_model = Author.objects.get(id=author_data['id'])
+        serializer.save(customer=customer_instance, author = author_instance)
+
+
+# class CreateBookAPIView(APIView):
+#     def post(self, request, *args, **kwargs):
+#         print(request.data)
+#         serializer = BookSerializer(data=request.data,context={'request': request})
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         else:
+#             print(serializer.errors)
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UpdateBookAPIView(APIView):
     def post(self, request, *args, **kwargs):
