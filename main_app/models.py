@@ -43,7 +43,7 @@ class Book(models.Model):
     published_date = models.DateField('Published Date')
     author = models.ForeignKey(Author,on_delete=models.CASCADE, verbose_name="author")
     customer = models.ForeignKey(Customer,on_delete=models.CASCADE,default=2000) 
-    cover_image = models.CharField(max_length=5000,default='')
+    cover_image = models.CharField(max_length=1000000,default='')
     # book_requests =  models.ManyToManyField(BookRequest)
     status = models.CharField(
             max_length=1,
